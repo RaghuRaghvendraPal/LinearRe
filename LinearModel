@@ -1,0 +1,51 @@
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+import matplotlib.pyplot as plt
+sal_info = {
+'Experience':[1.1,1.3,1.5,2,2.2,2.9,3,3.2,3.2,3.7,3.9,4,4,4.1,4.5,4.9,5.1,5.3,5.9,6,6.8,7.1,7.9,8.2,8.7,9,9.5,9.6,10.3,10.5],
+'Salary':[39343,46205,37731,43525,39891,56642,60150,54445,64445,57189,63218,55794,56957,57081,61111,67938,66029,83088,81363,93940,91738,98273,101302,113812,109431,105582,116969,112635,122391,121872]
+}
+
+data = pd.DataFrame(sal_info)
+print(data)
+X = data.iloc[:,:-1].values
+y = data.iloc[:,1].values
+print('X = ',X,'y = ',y)
+
+
+from sklearn.model_selection import train_test_split
+# we need to specify test size in the train_test_split as percentage it will take train size = 100 - test size
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 1/3,random_state = 0)
+print('X_train = ',X_train ,'X_test = ', X_test ,'y_train = ', y_train, 'y_test = ',y_test)
+
+# for linear regression we do not need to write feature scalling the library will take care of it
+#fitting Simple Linear Regression to the Trauning Set
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+# now we will create test set model that will give a value according to input
+# orr it will give salary depending on input experience
+y_pred = regressor.predict(X_test)
+
+print('Y_pred ',y_pred)
+print('Y_test ',y_test)
+
+# Visualiztion through graph
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.xlabel('Years of Experience')
+plt.ylabel('Salary')
+plt.title('Salary vs Experience Plot(Training set)')
+plt.show()
+
+
+
+# Visualiztion through graph
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.xlabel('Years of Experience')
+plt.ylabel('Salary')
+plt.title('Salary vs Experience Plot(Test set)')
+plt.show()

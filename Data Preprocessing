@@ -1,0 +1,106 @@
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+import matplotlib.pyplot as plt
+
+# iris = datasets.load_iris()
+# print(iris)
+# dataset = pd.read_csv('data.csv')
+info = {
+'Country':['France','Spain','Germany','Spain','Germany','France','Spain','France','Germany','France'],
+'Age':[44,27,30,38,40,35,'NaN',48,50,37],
+'Purchased':['No','Yes','No','No','Yes','Yes','No','Yes','No','Yes'],
+'Salary':[72000,48000,54000,61000,'NaN',58000,52000,79000,83000,67000]
+}
+# in file there is nothing in file but pd.read_csv will write 'NaN' here so i write 'NaN' here
+data = pd.DataFrame(info)
+# print(type(data))
+# print(data)
+# print(data.iloc[:,[:-1]])
+X = data.iloc[:,[0,1,3]].values # if we not use 'values' here it will return dataframe else it will return ndarray object
+y = data.iloc[:,2].values
+print(X)
+
+
+# taking care of missing data
+
+
+from sklearn.preprocessing import Imputer  # Imputer class will allow us to take care of those missing data
+# now we wil create object of Imputer class
+# imputer = Imputer(missing_values = 'NaN', strategy='mean',axis=0)
+# imputer = Imputer(missing_values = 'NaN', strategy='median',axis=0)
+imputer = Imputer(missing_values = 'NaN', strategy='most_frequent',axis=0)
+# axies = 0 means it will take mean of column, 1 means row mean,,,
+# 'null' the value we need to replace,
+# null is replaced by mean of column mean is specified in strategy
+print(type(X))
+# print(X[:,[0,2]])
+imputer = imputer.fit(X[:,[0,2]])
+# in fit we will not specify whole matrix we specify only that column that we want to change
+print(type(data['Country']))
+# to give calculated value to column
+
+X[:,[0,2]] = imputer.transform(X[:,[0,2]])
+
+print(X)
+
+# X = data.iloc[:,:-1]
+# print(X)
+
+
+
+
+# categorical data = data which have multiple category like Country have different record like Country have 3 different record
+# and purchased have 2 different record
+
+# Machine learning model want numeric data so we need convert our String data to numeric format using some methods
+
+from sklearn.preprocessing import LabelEncoder
+labelencoder_X = LabelEncoder()
+labelencoder_X = labelencoder_X.fit_transform(X[:,1])
+print(labelencoder_X)
+X[:,1] = labelencoder_X
+print(X)
+
+# In machine learning we need separate column for each categorical variable\
+# So we will create 3 column for each country of Country column
+
+# So we need another class
+print(X)
+from sklearn.preprocessing import OneHotEncoder
+onehotencoder_x = OneHotEncoder(categorical_features = [1])
+# Here we need to specify column number in categorical feature
+X = onehotencoder_x.fit_transform(X).toarray()
+# print(onehotencoder_x)
+# X=onehotencoder_x
+print(X)
+
+# do this for y
+labelencoder_y = LabelEncoder()
+y = labelencoder_y.fit_transform(y)
+print(y)
+# print(X[3])
+
+#Spliting data into test set and training set
+from sklearn.model_selection import train_test_split
+# we need to specify test size in the train_test_split as percentage it will take train size = 100 - test size
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 0.2,random_state = 0)
+print(X_train , X_test , y_train, y_test)
+# we will use this train and test set to train and test our model
+# later we will learn overfitting we will learn it in regression session
+
+#Feature Scalling
+ # IN Machine learning model we need to perform Euclidean distance so it is so hard to compute result from different scaling model so we need to make sure to make our machine learning model in same Scale ...
+ # Here Age And Model are from different Scale So first we will make it in same Model
+ # we will perform feature scalling by using 
+ #standarization and Normalization
+ 
+ # Standarization = X-mean(X)/standard deviation(X)
+ # Normalization = X - min(X)/(max(X)-min(X))
+ 
+from sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
+print(X_test)
+print(X_train)

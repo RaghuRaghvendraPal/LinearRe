@@ -28,13 +28,67 @@ data_multi = {
 
 data = pd.DataFrame(data_multi)
 print(data)
-# X = data.iloc[:,:-1].values
-# y = data.iloc[:,1].values
-# print('X = ',X,'y = ',y)
+X = data.iloc[:,[0,1,3,4]].values
+y = data.iloc[:,2].values
+print('X = ',X,'y = ',y)
 
 
-# from sklearn.model_selection import train_test_split
-# # we need to specify test size in the train_test_split as percentage it will take train size = 100 - test size
-# X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 1/3,random_state = 0)
+from sklearn.preprocessing import LabelEncoder,OneHotEncoder
+labelencoder_X = LabelEncoder()
+labelencoder_X = labelencoder_X.fit_transform(X[:,-1])
+X[:,-1] = labelencoder_X
+# print('X = ',X)
+
+onehotencoder_X = OneHotEncoder(categorical_features = [-1])
+X = onehotencoder_X.fit_transform(X).toarray()
+
+# print(X)
+# print(X.shape)
+
+# To avoid dummy variable
+
+X = X[:,1:]
+# print(X.shape)
+
+
+from sklearn.model_selection import train_test_split
+# we need to specify test size in the train_test_split as percentage it will take train size = 100 - test size
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 0.20,random_state = 0)
 # print('X_train = ',X_train ,'X_test = ', X_test ,'y_train = ', y_train, 'y_test = ',y_test)
 
+# do not need to apply feature scalling because library will automatically take care of it
+
+
+# from sklearn.preprocessing import StandardScaler
+''' sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)'''
+# print(X_test)
+# print(X_train)
+
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train,y_train)
+
+#Predicting the test set results
+
+Y_pred = regressor.predict(X_test)
+
+# Building a model using Backward Elimination
+# first we need to add a column of all ones
+import statsmodels.formula.api as sm
+#THIS IMPORT IS NOT WORKING IN DATACAMP
+
+X = np.append(arr = np.ones((50, 1)).astype(int), values = X, axis = 1)
+
+
+
+
+plt.scatter(X_train,y_train,color='red')
+plt.scatter(X_test,y_test,color='orange')
+plt.plot(X_train,regressor.predict(X_train),color = 'blue')
+plt.xlabel('Input')
+plt.ylabel('Output')
+plt.title('Plot')
+plt.show()

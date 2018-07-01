@@ -93,6 +93,10 @@ y = labelencoder_y.fit_transform(y)
 print(y)
 # print(X[3])
 
+########################################################################################################################################
+###################################################### Training and Test Set ###########################################################
+########################################################################################################################################
+
 #Spliting data into test set and training set
 from sklearn.model_selection import train_test_split
 # we need to specify test size in the train_test_split as percentage it will take train size = 100 - test size
@@ -101,11 +105,17 @@ print(X_train , X_test , y_train, y_test)
 # we will use this train and test set to train and test our model
 # later we will learn overfitting we will learn it in regression session
 
+########################################################################################################################################
+###################################################### Feature Scaling #################################################################
+########################################################################################################################################
+
 #Feature Scalling
  # IN Machine learning model we need to perform Euclidean distance so it is so hard to compute result from different scaling model so we need to make sure to make our machine learning model in same Scale ...
  # Here Age And Model are from different Scale So first we will make it in same Model
  # we will perform feature scalling by using 
  #standarization and Normalization
+ 
+ # If we will not do feature scaling then beacuse of large values in particular column our model will take large time to execute a model
  
  # Standarization = X-mean(X)/standard deviation(X)
  # Normalization = X - min(X)/(max(X)-min(X))
@@ -116,3 +126,6 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 print(X_test)
 print(X_train)
+
+# we will not perform feature scalling in y because it only have 2 category of values
+# if it has large and different values then we will apply feature scalling

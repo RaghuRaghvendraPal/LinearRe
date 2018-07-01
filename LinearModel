@@ -1,3 +1,6 @@
+########################################################################################################################################
+###################################################### Simple Linear Regression#########################################################
+########################################################################################################################################
 import numpy as np
 import pandas as pd
 from sklearn import datasets
@@ -21,6 +24,7 @@ print('X_train = ',X_train ,'X_test = ', X_test ,'y_train = ', y_train, 'y_test 
 
 # for linear regression we do not need to write feature scalling the library will take care of it
 #fitting Simple Linear Regression to the Trauning Set
+
 from sklearn.linear_model import LinearRegression
 regressor = LinearRegression()
 regressor.fit(X_train, y_train)

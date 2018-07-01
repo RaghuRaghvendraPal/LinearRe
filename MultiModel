@@ -80,6 +80,10 @@ Y_pred = regressor.predict(X_test)
 import statsmodels.formula.api as sm
 #THIS IMPORT IS NOT WORKING IN DATACAMP
 
+
+#Here we add ones in a X dataset to make a multilinear equation b0X0+b1X1+b2X2...
+# Here X0 = column of ones.
+
 X = np.append(arr = np.ones((50, 1)).astype(int), values = X, axis = 1)
 
 
